@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <head>
-  <img src="logo.jpeg" alt="De Werkplaats" style="width: 300px; margin-bottom: 20px;">
   <title>Workshop Aanmelding</title>
-  <p id="status">Laden...</p>
+
   <style>
     body {
       font-family: Arial;
       background: #f3eeeb;
       text-align: center;
     }
+
     .box {
       background: white;
       padding: 25px;
@@ -19,12 +20,14 @@
       max-width: 400px;
       border-radius: 12px;
     }
+
     input, button {
       width: 90%;
       padding: 12px;
       font-size: 16px;
       margin: 6px;
     }
+
     button {
       background: #645dd1;
       color: white;
@@ -32,28 +35,32 @@
       cursor: pointer;
       border-radius: 25px;
     }
+
     .persoon {
       border-top: 1px solid #ddd;
       margin-top: 10px;
       padding-top: 10px;
     }
-    .remove {
-      background: #999;
-    }
   </style>
 </head>
+
 <body>
+
+<img src="logo.jpeg" style="width: 300px; margin-bottom: 20px;">
+<p id="status">Laden...</p>
 
 <div class="box">
   <h2>Workshop Aanmelding</h2>
-  <p id="status">Klik op aanmelden om je in te schrijven</p>
 
   <form onsubmit="sendData(event)">
+
+    <button type="submit" id="btn">Aanmelden</button>
+    <button type="button" onclick="addPersoon()">+ Persoon toevoegen</button>
+    <button type="button" onclick="removeLast()">Verwijderen</button>
+
     <div id="personen"></div>
 
-  <button type="submit" id="btn">Aanmelden</button>
-<button type="button" onclick="addPersoon()">+ Persoon toevoegen</button>
-<button type="button" onclick="removeLast()">Verwijderen</button>
+  </form>
 
   <p id="melding"></p>
 </div>
@@ -120,12 +127,12 @@ function sendData(e) {
     const inputs = div.querySelectorAll("input");
 
     personen.push({
-  naam: inputs[0].value,
-  leeftijd: inputs[1].value,
-  telefoon: inputs[2].value,
-  email: inputs[3].value,
-  sheet: "Sheet1"
-});
+      naam: inputs[0].value,
+      leeftijd: inputs[1].value,
+      telefoon: inputs[2].value,
+      email: inputs[3].value,
+      sheet: "Sheet1" // 👈 voor tweede link verander naar "Sheet2"
+    });
   });
 
   if (personen.length === 0) {
@@ -133,9 +140,7 @@ function sendData(e) {
     return;
   }
 
-  const aantal = personen.length;
-
-  if (aantal > beschikbarePlekken) {
+  if (personen.length > beschikbarePlekken) {
     alert("Er zijn nog maar " + beschikbarePlekken + " plekken!");
     return;
   }
