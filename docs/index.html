@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <head>
+  <img src="logo.jpeg" alt="De Werkplaats" style="width: 300px; margin-bottom: 20px;">
   <title>Workshop Aanmelding</title>
-
+  <p id="status">Laden...</p>
   <style>
     body {
       font-family: Arial;
       background: #f3eeeb;
       text-align: center;
     }
-
     .box {
       background: white;
       padding: 25px;
@@ -20,14 +19,12 @@
       max-width: 400px;
       border-radius: 12px;
     }
-
     input, button {
       width: 90%;
       padding: 12px;
       font-size: 16px;
       margin: 6px;
     }
-
     button {
       background: #645dd1;
       color: white;
@@ -35,38 +32,34 @@
       cursor: pointer;
       border-radius: 25px;
     }
-
     .persoon {
       border-top: 1px solid #ddd;
       margin-top: 10px;
       padding-top: 10px;
     }
+    .remove {
+      background: #999;
+    }
   </style>
 </head>
-
 <body>
-
-<img src="logo.jpeg" style="width: 300px; margin-bottom: 20px;">
-<p id="status">Laden...</p>
 
 <div class="box">
   <h2>Workshop Aanmelding</h2>
+  <p id="status">Klik op aanmelden om je in te schrijven</p>
 
   <form onsubmit="sendData(event)">
-
-    <button type="submit" id="btn">Aanmelden</button>
-    <button type="button" onclick="addPersoon()">+ Persoon toevoegen</button>
-    <button type="button" onclick="removeLast()">Verwijderen</button>
-
     <div id="personen"></div>
 
-  </form>
+  <button type="submit" id="btn">Aanmelden</button>
+<button type="button" onclick="addPersoon()">+ Persoon toevoegen</button>
+<button type="button" onclick="removeLast()">Verwijderen</button>
 
   <p id="melding"></p>
 </div>
 
 <script>
-const URL = "https://script.google.com/macros/s/AKfycbypPFBDmABPfDLdwWFosDjUimPlt1eoTL8ttGOXRUVmIe2my5dn9h4yPnpxn9Q0OHhznA/exec";
+const URL = "https://script.google.com/macros/s/AKfycbwYuCOy_-bymj5keq37-nilHyWO6OxPP-iYBSXJtPRoOeS3Fdj5ihawuNxpUVUjBbiu/exec";
 let beschikbarePlekken = 0;
 
 // ➕ Persoon toevoegen
@@ -95,7 +88,7 @@ function removeLast() {
     container.lastElementChild.remove();
   }
 }
-script.src = URL + "?sheet=Sheet1&callback=handleCount";
+
 // 📊 Teller ophalen
 function updateCount() {
   const script = document.createElement("script");
@@ -126,12 +119,12 @@ function sendData(e) {
   personenDivs.forEach(div => {
     const inputs = div.querySelectorAll("input");
 
-    personen.push({
-      naam: inputs[0].value,
-      leeftijd: inputs[1].value,
-      telefoon: inputs[2].value,
-      email: inputs[3].value,
-      sheet: "Sheet1" // 👈 voor tweede link verander naar "Sheet2"
+  personen.push({
+  naam: inputs[0].value,
+  leeftijd: inputs[1].value,
+  telefoon: inputs[2].value,
+  email: inputs[3].value,
+  sheet: "Sheet2"
     });
   });
 
@@ -140,7 +133,9 @@ function sendData(e) {
     return;
   }
 
-  if (personen.length > beschikbarePlekken) {
+  const aantal = personen.length;
+
+  if (aantal > beschikbarePlekken) {
     alert("Er zijn nog maar " + beschikbarePlekken + " plekken!");
     return;
   }
