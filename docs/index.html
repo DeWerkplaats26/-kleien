@@ -1,79 +1,9 @@
-<!DOCTYPE html>
-<html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<head>
-  <title>Workshop aanmelden</title>
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #f3eeeb;
-      text-align: center;
-    }
-
-    .box {
-      background: white;
-      padding: 25px;
-      margin: 50px auto;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 12px;
-    }
-
-    input, button {
-      width: 90%;
-      padding: 12px;
-      font-size: 16px;
-      margin: 6px;
-    }
-
-    button {
-      background: #645dd1;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 25px;
-    }
-
-    .persoon {
-      border-top: 1px solid #ddd;
-      margin-top: 10px;
-      padding-top: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-<!-- ✅ verplaatst naar body -->
-<img src="logo.jpeg" style="width: 300px; margin-bottom: 20px;">
-<p id="statusTop">Laden...</p>
-
-<div class="box">
-  <h2 id="titel"></h2>
-  <p id="status">Klik op aanmelden om je in te schrijven</p>
-
-  <form onsubmit="sendData(event)">
-    <div id="personen"></div>
-
-    <button type="submit" id="btn">Aanmelden</button>
-    <button type="button" onclick="addPersoon()">+ Persoon toevoegen</button>
-    <button type="button" onclick="removeLast()">Verwijderen</button>
-  </form>
-
-  <p id="melding"></p>
-</div>
-
 <script>
 const params = new URLSearchParams(window.location.search);
 const sheetName = params.get("sheet") || "Sheet1";
 
 const URL = "https://script.google.com/macros/s/AKfycbypPFBDmABPfDLdwWFosDjUimPlt1eoTL8ttGOXRUVmIe2my5dn9h4yPnpxn9Q0OHhznA/exec";
 let beschikbarePlekken = 0;
-
-// titel zetten
-document.getElementById("titel").innerText = sheetName;
 
 // ➕ Persoon toevoegen
 function addPersoon() {
@@ -94,7 +24,7 @@ function addPersoon() {
   container.appendChild(div);
 }
 
-// ❌ Laatste persoon verwijderen
+// ❌ verwijderen
 function removeLast() {
   const container = document.getElementById("personen");
   if (container.lastElementChild) {
@@ -102,7 +32,7 @@ function removeLast() {
   }
 }
 
-// 📊 Teller ophalen
+// 📊 teller + titel ophalen
 function updateCount() {
   const script = document.createElement("script");
   script.src = URL + "?sheet=" + sheetName + "&callback=handleCount";
@@ -112,6 +42,9 @@ function updateCount() {
 function handleCount(data) {
   beschikbarePlekken = data.left;
 
+  // 👇 titel komt nu uit spreadsheet
+  document.getElementById("titel").innerText = data.name;
+
   const status = document.getElementById("status");
 
   if (data.left > 0) {
@@ -120,9 +53,11 @@ function handleCount(data) {
     status.innerText = "Workshop is VOL";
     document.getElementById("btn").disabled = true;
   }
+
+  document.getElementById("statusTop").innerText = "✔ geladen";
 }
 
-// 🚀 Verzenden
+// 🚀 verzenden
 function sendData(e) {
   e.preventDefault();
 
@@ -179,6 +114,3 @@ addPersoon();
 updateCount();
 setInterval(updateCount, 2000);
 </script>
-
-</body>
-</html>
