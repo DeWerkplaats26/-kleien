@@ -45,7 +45,7 @@
 <body>
 
 <div class="box">
-  <h2>Roarrr!</h2>
+  <h2 id="titel"></h2>
   <p id="status">Klik op aanmelden om je in te schrijven</p>
 
   <form onsubmit="sendData(event)">
@@ -59,6 +59,10 @@
 </div>
 
 <script>
+
+const params = new URLSearchParams(window.location.search);
+const sheetName = params.get("sheet") || "Sheet1";
+  
 const URL = "https://script.google.com/macros/s/AKfycbypPFBDmABPfDLdwWFosDjUimPlt1eoTL8ttGOXRUVmIe2my5dn9h4yPnpxn9Q0OHhznA/exec";
 let beschikbarePlekken = 0;
 
@@ -160,6 +164,7 @@ function sendData(e) {
   .catch(() => {
     document.getElementById("melding").innerText = "❌ Fout bij verzenden";
     document.getElementById("btn").disabled = false;
+    document.getElementById("titel").innerText = sheetName;
   });
 }
 
