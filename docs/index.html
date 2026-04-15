@@ -8,7 +8,7 @@ let beschikbarePlekken = 0;
 // ➕ Persoon toevoegen
 function addPersoon() {
   const container = document.getElementById("personen");
-  if (!container) return; // 🔥 voorkomt error
+  if (!container) return;
 
   const count = container.children.length + 1;
 
@@ -44,19 +44,25 @@ function updateCount() {
 function handleCount(data) {
   beschikbarePlekken = data.left;
 
-  // titel uit sheet
-  document.getElementById("titel").innerText = data.name;
+  // 🔒 veilig titel zetten
+  const titelEl = document.getElementById("titel");
+  if (titelEl) titelEl.innerText = data.name;
 
+  // 🔒 veilig status zetten
   const status = document.getElementById("status");
-
-  if (data.left > 0) {
-    status.innerText = data.left + " plekken beschikbaar";
-  } else {
-    status.innerText = "Workshop is VOL";
-    document.getElementById("btn").disabled = true;
+  if (status) {
+    if (data.left > 0) {
+      status.innerText = data.left + " plekken beschikbaar";
+    } else {
+      status.innerText = "Workshop is VOL";
+      const btn = document.getElementById("btn");
+      if (btn) btn.disabled = true;
+    }
   }
 
-  document.getElementById("statusTop").innerText = "✔ geladen";
+  // 🔒 veilig top status
+  const top = document.getElementById("statusTop");
+  if (top) top.innerText = "✔ geladen";
 }
 
 // 🚀 verzenden
@@ -88,8 +94,11 @@ function sendData(e) {
     return;
   }
 
-  document.getElementById("btn").disabled = true;
-  document.getElementById("melding").innerText = "Bezig met verzenden...";
+  const btn = document.getElementById("btn");
+  if (btn) btn.disabled = true;
+
+  const melding = document.getElementById("melding");
+  if (melding) melding.innerText = "Bezig met verzenden...";
 
   fetch(URL, {
     method: "POST",
@@ -100,18 +109,19 @@ function sendData(e) {
     }
   })
   .then(() => {
-    document.getElementById("melding").innerText = "✅ Aanmelding gelukt!";
-    document.getElementById("personen").innerHTML = "";
+    if (melding) melding.innerText = "✅ Aanmelding gelukt!";
+    const container = document.getElementById("personen");
+    if (container) container.innerHTML = "";
     addPersoon();
-    document.getElementById("btn").disabled = false;
+    if (btn) btn.disabled = false;
   })
   .catch(() => {
-    document.getElementById("melding").innerText = "❌ Fout bij verzenden";
-    document.getElementById("btn").disabled = false;
+    if (melding) melding.innerText = "❌ Fout bij verzenden";
+    if (btn) btn.disabled = false;
   });
 }
 
-// 🚀 START (pas als pagina geladen is)
+// 🚀 START
 window.onload = function () {
   addPersoon();
   updateCount();
