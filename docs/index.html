@@ -11,6 +11,8 @@
       background: #f3eeeb;
       text-align: center;
     }
+    <img>
+<p id="status">
     .box {
       background: white;
       padding: 25px;
@@ -96,7 +98,7 @@ function removeLast() {
 // 📊 Teller ophalen
 function updateCount() {
   const script = document.createElement("script");
-  script.src = URL + "?sheet=Sheet1&callback=handleCount";
+  script.src = URL + "?sheet=" + sheetName + "&callback=handleCount";
   document.body.appendChild(script);
 }
 
@@ -128,7 +130,7 @@ function sendData(e) {
   leeftijd: inputs[1].value,
   telefoon: inputs[2].value,
   email: inputs[3].value,
-  sheet: "Sheet1"
+  sheet: sheetName
     });
   });
 
@@ -164,7 +166,6 @@ function sendData(e) {
   .catch(() => {
     document.getElementById("melding").innerText = "❌ Fout bij verzenden";
     document.getElementById("btn").disabled = false;
-    document.getElementById("titel").innerText = sheetName;
   });
 }
 
@@ -172,6 +173,7 @@ function sendData(e) {
 addPersoon();
 updateCount();
 setInterval(updateCount, 2000);
+document.getElementById("titel").innerText = sheetName;
 </script>
 
 </body>
